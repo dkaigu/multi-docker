@@ -1,0 +1,21 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t dkaigu/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run dkaigu/react-test npm test -- --coverage
+
+after_success:
+    - docker build -t dkaigu/multi-client ./client
+    - docker build -t dkaigu/multi-nginx ./nginx
+    - docker build -t dkaigu/multi-server ./server
+    - docker build -t dkaigu/multi-worker ./worker
+    #Take those images and push them to docker hub
+    - echo "$DOCKER_PASS" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker push dkaigu/multi-client
+    - docker push dkaigu/multi-nginx
+    - docker push dkaigu/multi-server
+    - docker push dkaigu/multi-worker
