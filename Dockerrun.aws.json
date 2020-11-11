@@ -24,7 +24,7 @@
         },
         {
             "name": "nginx",
-            "image": "dkaigu/nginx",
+            "image": "dkaigu/multi-nginx",
             "hostname": "nginx",
             "essential": true,
             "portMappings": [
